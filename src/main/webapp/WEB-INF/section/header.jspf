@@ -1,0 +1,41 @@
+<%-- 
+    Document   : index
+    Created on : 05-06-2017, 11:17:11
+    Author     : dci
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="template/css/estilo.css">
+        <title>JSP Page</title>
+    </head>
+    <body>
+        <div id="main">
+
+            <div id="header">
+
+                <div id="widgetBar">
+
+                    <div class="headerWidget">
+                       <a href="categorias">Categorias</a>
+                    </div>
+
+                    <div class="headerWidget">
+                        W2
+                    </div>
+
+                    <div class="headerWidget">
+                        <a href="verCarro">Ver carro</a>
+                    </div>
+
+                </div>
+
+                <a href="index.jsp">Logo
+                    <img src="template/img/carro.png" id="logo">
+                </a>
+            </div>
+
+            <!-- enf header -->

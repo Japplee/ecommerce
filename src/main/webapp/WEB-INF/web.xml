@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <context-param>
+        <param-name>jdbcPassword</param-name>
+        <param-value>crusaders</param-value>
+    </context-param>
+    <context-param>
+        <param-name>jdbcUser</param-name>
+        <param-value>root</param-value>
+    </context-param>
+    <context-param>
+        <param-name>jdbcUrl</param-name>
+        <param-value>jdbc:mysql://localhost:3306/</param-value>
+    </context-param>
+    <context-param>
+        <param-name>jdbcBD</param-name>
+        <param-value>e_commerce</param-value>
+    </context-param>
+    <context-param>
+        <param-name>jdbcDriver</param-name>
+        <param-value>com.mysql.jdbc.Driver</param-value>
+    </context-param>
+    <servlet>
+        <servlet-name>ControladorEcommerce</servlet-name>
+        <servlet-class>ecommerce.controlador.ControladorEcommerce</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ControladorEcommerce</servlet-name>
+        <url-pattern>/categorias</url-pattern>
+        <url-pattern>/nuevaCategoria</url-pattern>
+        <url-pattern>/guardarCategoria</url-pattern>
+        <url-pattern>/categoriaFormEditar</url-pattern>
+        <url-pattern>/categoriaActualizar</url-pattern>  
+        <url-pattern>/verCarro</url-pattern>       
+        
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+    <jsp-config>
+        <jsp-property-group>
+            <description>Header and Footer</description>
+            <url-pattern>/index.jsp</url-pattern>
+            <url-pattern>/WEB-INF/view/*</url-pattern>
+            <include-prelude>/WEB-INF/section/header.jspf</include-prelude>
+            <include-coda>/WEB-INF/section/footer.jspf</include-coda>
+        </jsp-property-group>
+    </jsp-config>
+</web-app>
