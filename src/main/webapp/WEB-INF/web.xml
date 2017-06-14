@@ -31,7 +31,11 @@
         <url-pattern>/guardarCategoria</url-pattern>
         <url-pattern>/categoriaFormEditar</url-pattern>
         <url-pattern>/categoriaActualizar</url-pattern>  
-        <url-pattern>/verCarro</url-pattern>       
+        <url-pattern>/verCarro</url-pattern>      
+        <url-pattern>/clientes</url-pattern>
+        <url-pattern>/ordenes</url-pattern>  
+        <url-pattern>/ordenProductos</url-pattern>
+        <url-pattern>/productos</url-pattern>      
         
     </servlet-mapping>
     <session-config>

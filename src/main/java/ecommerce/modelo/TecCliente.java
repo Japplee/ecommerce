@@ -12,7 +12,6 @@ public class TecCliente {
 	public ArrayList<TecOrden> tecOrden = new ArrayList<TecOrden>();
 
 	public TecCliente() {
-		throw new UnsupportedOperationException();
 	}
 
 	public int getCliId() {

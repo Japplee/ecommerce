@@ -9,6 +9,14 @@ import ecommerce.persistencia.dao.TecCategoriaDao;
 import ecommerce.persistencia.factory.DAOFactory;
 import ecommerce.persistencia.factory.TipoBD;
 import ecommerce.modelo.TecCategoria;
+import ecommerce.modelo.TecCliente;
+import ecommerce.modelo.TecOrden;
+import ecommerce.modelo.TecOrdenProducto;
+import ecommerce.modelo.TecProducto;
+import ecommerce.persistencia.dao.TecClienteDao;
+import ecommerce.persistencia.dao.TecOrdenDao;
+import ecommerce.persistencia.dao.TecOrdenProductoDao;
+import ecommerce.persistencia.dao.TecProductoDao;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -60,6 +68,18 @@ public class ControladorEcommerce extends HttpServlet {
                     break;
                 case "/verCarro":
                     this.mostrarCarro(request, response);
+                    break;
+                case "/clientes":
+                    this.listarClientes(request, response);
+                    break;
+                case "/ordenes":
+                    this.listarOrdenes(request, response);
+                    break;
+                case "/ordenProductos":
+                    this.listarOrdenProductos(request, response);
+                    break;
+                case "/productos":
+                    this.listarProductos(request, response);
                     break;
             }
 
@@ -160,7 +180,64 @@ public class ControladorEcommerce extends HttpServlet {
 
     private void mostrarCarro(HttpServletRequest request, HttpServletResponse response)
         throws SQLException, IOException, ServletException {
+        
+        TecOrdenDao ordenDao = ControladorEcommerce.fabrica.getTecOrdenDao();
+        TecOrden tecOrden = ordenDao.buscar(0, 1);
+        
+        TecOrdenProductoDao ordenProductoDao = ControladorEcommerce.fabrica.getTecOrdenProductoDao();
+        ArrayList<TecOrdenProducto> listadoProductos = ordenProductoDao.buscar(tecOrden.getOrdId());
+        //TecCategoriaDao categoriaDao = ControladorEcommerce.fabrica.getTecCategoriaDao();
+        //ArrayList<TecCategoria> listadoCategoria = categoriaDao.listar();
+
+        request.setAttribute("listadoProductos", listadoProductos);
+        request.setAttribute("orden", tecOrden);
+        
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/carro_mostrar.jsp");
         dispatcher.forward(request, response);
+    }
+
+    private void listarClientes(HttpServletRequest request, HttpServletResponse response) 
+        throws SQLException, IOException, ServletException {
+        
+        TecClienteDao clienteDao = ControladorEcommerce.fabrica.getTecClienteDao();
+        ArrayList<TecCliente> listadoClientes = clienteDao.listar();
+   
+        request.setAttribute("listadoClientes", listadoClientes);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/cliente.jsp");
+        dispatcher.forward(request, response);
+    }
+    
+    private void listarOrdenes(HttpServletRequest request, HttpServletResponse response) 
+        throws SQLException, IOException, ServletException {
+        
+        TecOrdenDao ordenDao = ControladorEcommerce.fabrica.getTecOrdenDao();
+        ArrayList<TecOrden> listadoOrdenes = ordenDao.listar();
+           
+        request.setAttribute("listadoOrdenes", listadoOrdenes);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/orden.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void listarOrdenProductos(HttpServletRequest request, HttpServletResponse response) 
+        throws SQLException, IOException, ServletException {
+        
+        TecOrdenProductoDao ordenProductoDao = ControladorEcommerce.fabrica.getTecOrdenProductoDao();
+        ArrayList<TecOrdenProducto> listadoOrdenProductos = ordenProductoDao.listar();
+           
+        request.setAttribute("listadoOrdenProductos", listadoOrdenProductos);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/ordenProducto.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void listarProductos(HttpServletRequest request, HttpServletResponse response)
+        throws SQLException, IOException, ServletException {
+        
+        TecProductoDao productoDao = ControladorEcommerce.fabrica.getTecProductoDao();
+        ArrayList<TecProducto> listadoProductos = productoDao.listar();
+        
+        request.setAttribute("listadoProductos", listadoProductos);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/producto.jsp");
+        dispatcher.forward(request, response);
+        
     }
 }

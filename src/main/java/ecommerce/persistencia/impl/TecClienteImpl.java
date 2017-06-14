@@ -5,11 +5,9 @@
  */
 package ecommerce.persistencia.impl;
 
-import com.mysql.jdbc.MySQLConnection;
 import ecommerce.modelo.TecCategoria;
 import ecommerce.modelo.TecCliente;
-import ecommerce.modelo.TecOrden;
-import ecommerce.persistencia.dao.TecOrdenDao;
+import ecommerce.persistencia.dao.TecClienteDao;
 import ecommerce.persistencia.factory.MysqlDaoFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,35 +21,24 @@ import java.util.logging.Logger;
  *
  * @author Jorge
  */
-public class TecOrdenImpl implements TecOrdenDao{
-    
+public class TecClienteImpl implements TecClienteDao {
+
     private final Connection conn;
-    
-    public TecOrdenImpl() {
+
+    public TecClienteImpl() {
         this.conn = MysqlDaoFactory.createConnection();
     }
-
+    
     @Override
-    public TecOrden buscar(int numConfirm, int idOrd) {
-        
-        TecOrden ord = null;
+    public TecCliente buscar(int idCli) {
+        TecCliente cli = null;
         ResultSet rs;
-        String sql = "";
-        int valor = 0;
-        
-        if (numConfirm != 0) {
-            sql = "SELECT * FROM tec_orden WHERE ord_num_confirmacion = ?";
-            valor = numConfirm;
-            
-        }else if (idOrd != 0) {
-            sql = "SELECT * FROM tec_orden WHERE ord_id = ?";
-            valor = idOrd;
-        }
+        String sql = "SELECT * FROM tec_cliente WHERE cli_id = ?";
 
         try {
 
             PreparedStatement pstm = this.conn.prepareStatement(sql);
-            pstm.setInt(1, valor);
+            pstm.setInt(1, idCli);
             rs = pstm.executeQuery();
 
             if (!rs.next()) {
@@ -60,15 +47,13 @@ public class TecOrdenImpl implements TecOrdenDao{
             } else {
                 do {
                     
-                    TecCliente cli = new TecCliente();
-                    TecClienteImpl impCli = new TecClienteImpl();
-                    cli = impCli.buscar(rs.getInt("cli_id"));
-                    ord = new TecOrden();
-                    ord.setOrdId(rs.getInt("ord_id"));
-                    ord.setCli(cli);
-                    ord.setOrdCreacion(rs.getString("ord_fcreacion"));
-                    ord.setOrdNumConfirmacion(rs.getInt("ord_num_confirmacion"));
-                    ord.setOrdPrecioTotal(rs.getInt("ord_precio_total"));
+                    cli = new TecCliente();
+                    cli.setCliId(rs.getInt("cli_id"));
+                    cli.setCliNombres(rs.getString("cli_nombres"));
+                    cli.setCliApellidos(rs.getString("cli_apellidos"));
+                    cli.setCliTelefono(rs.getString("cli_telefono"));
+                    cli.setCliDireccion(rs.getString("cli_direccion"));
+                    cli.setCliComuna(rs.getString("cli_comuna"));
 
                 } while (rs.next());
             }
@@ -76,16 +61,16 @@ public class TecOrdenImpl implements TecOrdenDao{
         } catch (SQLException ex) {
             Logger.getLogger(TecOrdenImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return ord;
+        return cli; 
     }
-    
+
     @Override
-    public ArrayList<TecOrden> listar() {
+    public ArrayList<TecCliente> listar() {
         
-        ArrayList<TecOrden> ordenes = new ArrayList<>();
+        ArrayList<TecCliente> clientes = new ArrayList<>();
         
         ResultSet rs;
-        String sql = "SELECT * FROM tec_orden";
+        String sql = "SELECT * FROM tec_cliente";
         
         try {
 
@@ -98,17 +83,14 @@ public class TecOrdenImpl implements TecOrdenDao{
             } else {
                 do {
                     
-                    TecOrden ord;
-                    TecCliente cli;
-                    TecClienteImpl impCli = new TecClienteImpl();
-                    cli = impCli.buscar(rs.getInt("cli_id"));
-                    ord = new TecOrden();
-                    ord.setOrdId(rs.getInt("ord_id"));
-                    ord.setCli(cli);
-                    ord.setOrdCreacion(rs.getString("ord_fcreacion"));
-                    ord.setOrdNumConfirmacion(rs.getInt("ord_num_confirmacion"));
-                    ord.setOrdPrecioTotal(rs.getInt("ord_precio_total"));
-                    ordenes.add(ord);
+                    TecCliente cli = new TecCliente();
+                    cli.setCliId(rs.getInt("cli_id"));
+                    cli.setCliNombres(rs.getString("cli_nombres"));
+                    cli.setCliApellidos(rs.getString("cli_apellidos"));
+                    cli.setCliTelefono(rs.getString("cli_telefono"));
+                    cli.setCliDireccion(rs.getString("cli_direccion"));
+                    cli.setCliComuna(rs.getString("cli_comuna"));
+                    clientes.add(cli);
 
                 } while (rs.next());
             }
@@ -116,16 +98,17 @@ public class TecOrdenImpl implements TecOrdenDao{
         } catch (SQLException ex) {
             Logger.getLogger(TecCategoriaImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return ordenes;
+        return clientes;
+        
     }
 
     @Override
-    public boolean guardar(TecOrden ord) {
+    public boolean guardar(TecCliente cat) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean editar(TecOrden ord) {
+    public boolean editar(TecCliente cat) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
