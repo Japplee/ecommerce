@@ -1,4 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<a href="nuevaOrdenProducto">Nueva Orden Producto</a><br>
+<br>
 <div>
     <table>
         <thead>
@@ -18,8 +20,8 @@
                     <td>${i.pro.getProId()}</td>
                     <td>${i.getTopCantidad()}</td>
                     <td>${i.getTopSubtotal()}</td>
-                    <td><a href="#">Editar</a></td>
-                    <td><a href="#">Borrar</a></td>
+                    <td><a href="editarOrdenProductoForm?idOrd=${i.ord.getOrdId()}&idPro=${i.pro.getProId()}">Editar</a></td>
+                    <td><a href="eliminarOrdenProducto?idOrd=${i.ord.getOrdId()}&idPro=${i.pro.getProId()}">Borrar</a></td>
                 </tr>
             </c:forEach>
         </tbody>

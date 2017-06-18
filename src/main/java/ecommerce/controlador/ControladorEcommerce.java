@@ -72,14 +72,50 @@ public class ControladorEcommerce extends HttpServlet {
                 case "/clientes":
                     this.listarClientes(request, response);
                     break;
+                case "/nuevoCliente":
+                    this.mostrarFormCliente(request, response);
+                    break;
+                case "/borrarCliente":
+                    this.borrarCliente(request, response);
+                    break;
+                case "/editarClienteForm":
+                    this.mostrarFormEditarCliente(request, response);
+                    break;    
                 case "/ordenes":
                     this.listarOrdenes(request, response);
+                    break;
+                case "/nuevasOrdenes":
+                    this.mostrarFormOrdenes(request, response);
+                    break;
+                case "/eliminarOrden":
+                    this.borrarOrden(request, response);
+                    break;
+                case "/editarOrdenForm":
+                    this.mostrarFormEditarOrden(request, response);
                     break;
                 case "/ordenProductos":
                     this.listarOrdenProductos(request, response);
                     break;
+                case "/nuevaOrdenProducto":
+                    this.nuevaOrdenProducto(request, response);
+                    break;
+                case "/eliminarOrdenProducto":
+                    this.eliminarOrdenProducto(request, response);
+                    break;
+                case "/editarOrdenProductoForm":
+                    this.editarOrdenProductoForm(request, response);
+                    break;
                 case "/productos":
                     this.listarProductos(request, response);
+                    break;
+                case "/nuevosProductos":
+                    this.mostrarFormProductos(request, response);
+                    break;
+                case "/eliminarProducto":
+                    this.eliminarProducto(request, response);
+                    break;
+                case "/editarProductoForm":
+                    this.mostrarFormEditarProducto(request, response);
                     break;
             }
 
@@ -110,7 +146,30 @@ public class ControladorEcommerce extends HttpServlet {
                 case "/categoriaActualizar":
                     this.actualizarCategoria(request, response);
                     break;
-
+                case "/guardarCliente":
+                    this.guardarCliente(request, response);
+                    break;
+                case "/editarCliente":
+                    this.editarCliente(request, response);
+                    break;  
+                case "/guardarOrden":
+                    this.guardarOrden(request, response);
+                    break;
+                case "/editarOrden":
+                    this.editarOrden(request, response);
+                    break;
+                case "/guardarProducto":
+                    this.guardarProducto(request, response);
+                    break;
+                case "/editarProducto":
+                    this.editarProducto(request, response);
+                    break;
+                case "/guardarOrdenProducto":
+                    this.guardarOrdenProducto(request, response);
+                    break;
+                case "/editarOrdenProducto":
+                    this.editarOrdenProducto(request, response);
+                    break;
             }
 
         } catch (SQLException e) {
@@ -185,7 +244,7 @@ public class ControladorEcommerce extends HttpServlet {
         TecOrden tecOrden = ordenDao.buscar(0, 1);
         
         TecOrdenProductoDao ordenProductoDao = ControladorEcommerce.fabrica.getTecOrdenProductoDao();
-        ArrayList<TecOrdenProducto> listadoProductos = ordenProductoDao.buscar(tecOrden.getOrdId());
+        ArrayList<TecOrdenProducto> listadoProductos = ordenProductoDao.listar();
         //TecCategoriaDao categoriaDao = ControladorEcommerce.fabrica.getTecCategoriaDao();
         //ArrayList<TecCategoria> listadoCategoria = categoriaDao.listar();
 
@@ -239,5 +298,280 @@ public class ControladorEcommerce extends HttpServlet {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/producto.jsp");
         dispatcher.forward(request, response);
         
+    }
+
+    private void guardarCliente(HttpServletRequest request, HttpServletResponse response) 
+        throws SQLException, IOException, ServletException {
+        
+        TecCliente tecCliente = new TecCliente();
+        
+        tecCliente.setCliNombres(request.getParameter("nombres_cliente"));
+        tecCliente.setCliApellidos(request.getParameter("apellidos_cliente"));
+        tecCliente.setCliTelefono(request.getParameter("numero_cliente"));
+        tecCliente.setCliDireccion(request.getParameter("direccion_cliente"));
+        tecCliente.setCliComuna(request.getParameter("comuna_cliente"));
+        TecClienteDao clienteDao = ControladorEcommerce.fabrica.getTecClienteDao();
+        clienteDao.guardar(tecCliente);
+        response.sendRedirect("clientes");
+        
+    }
+
+    private void mostrarFormCliente(HttpServletRequest request, HttpServletResponse response) 
+        throws SQLException, IOException, ServletException {
+        
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/cliente_form.jsp");
+        dispatcher.forward(request, response);
+    }
+    
+    private void mostrarFormEditarCliente(HttpServletRequest request, HttpServletResponse response) 
+        throws SQLException, IOException, ServletException {
+        
+        TecCliente cliente;
+        TecClienteDao clienteDao = ControladorEcommerce.fabrica.getTecClienteDao();
+        cliente = clienteDao.buscar(Integer.parseInt(request.getParameter("id")));
+        request.setAttribute("cliente", cliente);
+        
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/editar_cliente_form.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void borrarCliente(HttpServletRequest request, HttpServletResponse response) 
+        throws SQLException, IOException, ServletException {
+        
+        TecClienteDao clienteDao = ControladorEcommerce.fabrica.getTecClienteDao();
+        clienteDao.borrar(Integer.parseInt(request.getParameter("id")));
+        response.sendRedirect("clientes");
+    }
+
+    private void editarCliente(HttpServletRequest request, HttpServletResponse response) 
+        throws SQLException, IOException, ServletException {
+        
+        TecCliente tecCliente = new TecCliente();
+        
+        tecCliente.setCliId(Integer.parseInt(request.getParameter("id_cliente")));
+        tecCliente.setCliNombres(request.getParameter("nombres_cliente"));
+        tecCliente.setCliApellidos(request.getParameter("apellidos_cliente"));
+        tecCliente.setCliTelefono(request.getParameter("numero_cliente"));
+        tecCliente.setCliDireccion(request.getParameter("direccion_cliente"));
+        tecCliente.setCliComuna(request.getParameter("comuna_cliente"));
+        TecClienteDao clienteDao = ControladorEcommerce.fabrica.getTecClienteDao();
+        clienteDao.editar(tecCliente);
+        response.sendRedirect("clientes");
+        
+    }
+
+    private void mostrarFormOrdenes(HttpServletRequest request, HttpServletResponse response) 
+        throws SQLException, IOException, ServletException {
+        
+       RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/orden_form.jsp");
+        dispatcher.forward(request, response); 
+    }
+
+    private void guardarOrden(HttpServletRequest request, HttpServletResponse response) 
+        throws SQLException, IOException, ServletException {
+        
+        TecCliente cliente;
+        TecClienteDao clienteDao = ControladorEcommerce.fabrica.getTecClienteDao();
+        
+        cliente = clienteDao.buscar(Integer.parseInt(request.getParameter("id_cliente")));
+        
+        TecOrdenDao ordenDao = ControladorEcommerce.fabrica.getTecOrdenDao();
+        TecOrden orden = new TecOrden();
+        
+        orden.setCli(cliente);
+        orden.setOrdCreacion(request.getParameter("fecha_orden"));
+        orden.setOrdNumConfirmacion(Integer.parseInt(request.getParameter("numero_orden")));
+        orden.setOrdPrecioTotal(Integer.parseInt(request.getParameter("precio_orden")));
+        
+        ordenDao.guardar(orden);
+        response.sendRedirect("ordenes");
+    }
+
+    private void editarOrden(HttpServletRequest request, HttpServletResponse response) 
+        throws SQLException, IOException, ServletException {
+        
+        TecCliente cliente;
+        TecClienteDao clienteDao = ControladorEcommerce.fabrica.getTecClienteDao();
+        TecOrdenDao ordenDao = ControladorEcommerce.fabrica.getTecOrdenDao();
+        
+        cliente = clienteDao.buscar(Integer.parseInt(request.getParameter("id_cliente")));
+        
+        TecOrden orden = new TecOrden();
+        orden.setOrdId(Integer.parseInt(request.getParameter("id_orden")));
+        orden.setCli(cliente);
+        orden.setOrdCreacion(request.getParameter("fecha_orden"));
+        orden.setOrdNumConfirmacion(Integer.parseInt(request.getParameter("numero_orden")));
+        orden.setOrdPrecioTotal(Integer.parseInt(request.getParameter("precio_orden")));
+        
+        ordenDao.editar(orden);
+        response.sendRedirect("ordenes");
+    }
+
+    private void borrarOrden(HttpServletRequest request, HttpServletResponse response) 
+        throws SQLException, IOException, ServletException {
+        
+        TecOrdenDao ordenDao = ControladorEcommerce.fabrica.getTecOrdenDao();
+        ordenDao.borrar(Integer.parseInt(request.getParameter("id")));
+        response.sendRedirect("ordenes");
+    }
+
+    private void mostrarFormEditarOrden(HttpServletRequest request, HttpServletResponse response) 
+        throws SQLException, IOException, ServletException {
+        
+        TecOrden orden;
+        TecOrdenDao ordenDao = ControladorEcommerce.fabrica.getTecOrdenDao();
+        orden = ordenDao.buscar(0, Integer.parseInt(request.getParameter("id")));
+        request.setAttribute("orden", orden);
+        
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/editar_orden_form.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void mostrarFormProductos(HttpServletRequest request, HttpServletResponse response) 
+        throws SQLException, IOException, ServletException {
+        
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/producto_form.jsp");
+        dispatcher.forward(request, response); 
+    }
+
+    private void eliminarProducto(HttpServletRequest request, HttpServletResponse response) 
+        throws SQLException, IOException, ServletException {
+        
+        TecProductoDao productoDao = ControladorEcommerce.fabrica.getTecProductoDao();
+        productoDao.borrar(Integer.parseInt(request.getParameter("id")));
+        response.sendRedirect("productos");
+    }
+
+    private void mostrarFormEditarProducto(HttpServletRequest request, HttpServletResponse response) 
+        throws SQLException, IOException, ServletException {
+        
+        TecProducto producto;
+        TecProductoDao productoDao = ControladorEcommerce.fabrica.getTecProductoDao();
+        producto = productoDao.buscar(Integer.parseInt(request.getParameter("id")));
+        request.setAttribute("producto", producto);
+        
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/editar_producto_form.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void guardarProducto(HttpServletRequest request, HttpServletResponse response) 
+        throws SQLException, IOException, ServletException {
+        
+                
+        TecCategoria categoria;
+        TecCategoriaDao categoriaDao = ControladorEcommerce.fabrica.getTecCategoriaDao();
+        
+        categoria = categoriaDao.buscar(Integer.parseInt(request.getParameter("id_categoria")));
+        
+        TecProductoDao productoDao = ControladorEcommerce.fabrica.getTecProductoDao();
+        TecProducto producto = new TecProducto();
+        
+        producto.setCat(categoria);
+        producto.setProNombre(request.getParameter("nombre_producto"));
+        producto.setProDescripcion(request.getParameter("descripcion_producto"));
+        producto.setProPrecio(Integer.parseInt(request.getParameter("precio_producto")));
+        producto.setProUltimaActualizacion(request.getParameter("ultima_producto"));
+        
+        productoDao.guardar(producto);
+        response.sendRedirect("productos");
+    }
+
+    private void editarProducto(HttpServletRequest request, HttpServletResponse response)
+        throws SQLException, IOException, ServletException {
+        
+        TecCategoria categoria;
+        TecCategoriaDao categoriaDao = ControladorEcommerce.fabrica.getTecCategoriaDao();
+        TecProductoDao productoDao = ControladorEcommerce.fabrica.getTecProductoDao();
+        
+        categoria = categoriaDao.buscar(Integer.parseInt(request.getParameter("id_categoria")));
+        
+        TecProducto producto = new TecProducto();
+        producto.setCat(categoria);
+        producto.setProNombre(request.getParameter("nombre_producto"));
+        producto.setProDescripcion(request.getParameter("descripcion_producto"));
+        producto.setProPrecio(Integer.parseInt(request.getParameter("precio_producto")));
+        producto.setProUltimaActualizacion(request.getParameter("ultima_producto"));
+        
+        productoDao.editar(producto);
+        response.sendRedirect("productos");
+    }
+
+    private void nuevaOrdenProducto(HttpServletRequest request, HttpServletResponse response) 
+        throws SQLException, IOException, ServletException {
+        
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/ordenProducto_form.jsp");
+        dispatcher.forward(request, response); 
+    }
+
+    private void eliminarOrdenProducto(HttpServletRequest request, HttpServletResponse response) 
+        throws SQLException, IOException, ServletException {
+        
+        TecOrdenProductoDao ordenProductoDao = ControladorEcommerce.fabrica.getTecOrdenProductoDao();
+        ordenProductoDao.borrar(Integer.parseInt(request.getParameter("idOrd")),
+                Integer.parseInt(request.getParameter("idPro")));
+        response.sendRedirect("ordenProductos");
+    }
+
+    private void editarOrdenProductoForm(HttpServletRequest request, HttpServletResponse response) 
+        throws SQLException, IOException, ServletException {
+        
+        TecOrdenProducto ordenProducto;
+        TecOrdenProductoDao ordenProductoDao = ControladorEcommerce.fabrica.getTecOrdenProductoDao();
+        ordenProducto = ordenProductoDao.buscar(Integer.parseInt(request.getParameter("idOrd")), Integer.parseInt(request.getParameter("idPro")));
+        request.setAttribute("ordenProducto", ordenProducto);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/view/editar_ordenProducto_form.jsp");
+        dispatcher.forward(request, response);
+            
+    }
+
+    private void guardarOrdenProducto(HttpServletRequest request, HttpServletResponse response) 
+        throws SQLException, IOException, ServletException {
+        
+        //Orden
+        TecOrden orden;
+        TecOrdenDao ordenDao = ControladorEcommerce.fabrica.getTecOrdenDao();
+        orden = ordenDao.buscar(0, Integer.parseInt(request.getParameter("id_orden")));
+        
+        //Producto
+        TecProducto producto;
+        TecProductoDao productoDao = ControladorEcommerce.fabrica.getTecProductoDao();
+        producto = productoDao.buscar(Integer.parseInt(request.getParameter("id_producto")));
+        
+        TecOrdenProductoDao ordenProductoDao = ControladorEcommerce.fabrica.getTecOrdenProductoDao();
+        TecOrdenProducto ordenProducto = new TecOrdenProducto();
+        
+        ordenProducto.setOrd(orden);
+        ordenProducto.setPro(producto);
+        ordenProducto.setTopCantidad(Integer.parseInt(request.getParameter("top_cantidad")));
+        ordenProducto.setTopSubtotal(Integer.parseInt(request.getParameter("top_subtotal")));
+        
+        ordenProductoDao.guardar(ordenProducto);
+        response.sendRedirect("ordenProductos");
+    }
+
+    private void editarOrdenProducto(HttpServletRequest request, HttpServletResponse response) 
+        throws SQLException, IOException, ServletException {
+        
+        //Orden
+        TecOrden orden;
+        TecOrdenDao ordenDao = ControladorEcommerce.fabrica.getTecOrdenDao();
+        orden = ordenDao.buscar(0, Integer.parseInt(request.getParameter("id_orden")));
+        
+        //Producto
+        TecProducto producto;
+        TecProductoDao productoDao = ControladorEcommerce.fabrica.getTecProductoDao();
+        producto = productoDao.buscar(Integer.parseInt(request.getParameter("id_producto")));
+        
+        TecOrdenProductoDao ordenProductoDao = ControladorEcommerce.fabrica.getTecOrdenProductoDao();
+        TecOrdenProducto ordenProducto = new TecOrdenProducto();
+        
+        ordenProducto.setOrd(orden);
+        ordenProducto.setPro(producto);
+        ordenProducto.setTopCantidad(Integer.parseInt(request.getParameter("top_cantidad")));
+        ordenProducto.setTopSubtotal(Integer.parseInt(request.getParameter("top_subtotal")));
+        System.out.println("AAAAA" + ordenProducto.ord.getOrdId());
+        System.out.println("BBBBB" + ordenProducto.pro.getProId());
+        ordenProductoDao.editar(ordenProducto);
+        response.sendRedirect("ordenProductos");
     }
 }

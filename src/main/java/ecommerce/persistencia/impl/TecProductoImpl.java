@@ -112,18 +112,69 @@ public class TecProductoImpl implements TecProductoDao{
     }
 
     @Override
-    public boolean guardar(TecProductoDao pro) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean guardar(TecProducto pro) {
+        boolean resultado = false;
+        String sql = "INSERT INTO tec_producto(cat_id, pro_nombre, pro_descripcion, pro_precio, pro_ultima_actualizacion) values(?, ?, ? ,?, ?)";
+        try {
+            PreparedStatement pstm = this.conn.prepareStatement(sql);
+            pstm.setInt(1, pro.cat.getCatId());
+            pstm.setString(2, pro.getProNombre());
+            pstm.setString(3, pro.getProDescripcion());
+            pstm.setInt(4, pro.getProPrecio());
+            pstm.setString(5, pro.getProUltimaActualizacion());
+            pstm.executeUpdate();
+            resultado = true;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(TecClienteImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return resultado;
     }
 
     @Override
-    public boolean editar(TecProductoDao pro) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean editar(TecProducto pro) {
+        boolean result = false;
+        String sql = "UPDATE tec_producto SET pro_nombre = ?, pro_descripcion = ?,"
+                + "pro_precio = ?, pro_ultima_actualizacion = ?, cat_id = ? WHERE ord_id = ?";
+        Logger.getLogger(TecProductoImpl.class.getName()).log(Level.SEVERE, "Producto editar {0}", pro);
+
+        try {
+            PreparedStatement pstm = this.conn.prepareStatement(sql);
+            pstm.setString(1, pro.getProNombre());
+            pstm.setString(2, pro.getProDescripcion());
+            pstm.setInt(3, pro.getProPrecio());
+            pstm.setString(4, pro.getProUltimaActualizacion());
+            pstm.setInt(5, pro.cat.getCatId());
+            pstm.setInt(6, pro.getProId());
+            
+            int filasAfectadas = pstm.executeUpdate();
+            result = (filasAfectadas != 0);
+            Logger.getLogger(TecProductoImpl.class.getName()).log(Level.SEVERE, "Edita {0}", result);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(TecProductoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return result;
     }
 
     @Override
     public boolean borrar(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        boolean result = false;
+        String sql = "DELETE FROM tec_producto WHERE pro_id = ?";
+
+        try {
+            PreparedStatement pstm = this.conn.prepareStatement(sql);
+            pstm.setInt(1, id);
+            int filasAfectadas = pstm.executeUpdate();
+            result = (filasAfectadas != 0);
+            Logger.getLogger(TecProductoImpl.class.getName()).log(Level.SEVERE, "BORRA {0}", result);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(TecProductoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return result;
     }
     
 }

@@ -18,9 +18,9 @@ public interface TecProductoDao {
 
     public ArrayList<TecProducto> listar();
 
-    public boolean guardar(TecProductoDao pro);
+    public boolean guardar(TecProducto pro);
 
-    public boolean editar(TecProductoDao pro);
+    public boolean editar(TecProducto pro);
 
     public boolean borrar(int id);
     

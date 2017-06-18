@@ -1,4 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<a href="nuevoCliente">Crear Clientes</a>
+<br>
 <div>
     <table>
         <thead>
@@ -22,8 +24,8 @@
                     <td>${i.getCliTelefono()}</td>
                     <td>${i.getCliDireccion()}</td>
                     <td>${i.getCliComuna()}</td>
-                    <td><a href="#">Editar</a></td>
-                    <td><a href="#">Borrar</a></td>
+                    <td><a href="editarClienteForm?id=${i.getCliId()}">Editar</a></td>
+                    <td><a href="borrarCliente?id=${i.getCliId()}">Borrar</a></td>
                 </tr>
             </c:forEach>
         </tbody>

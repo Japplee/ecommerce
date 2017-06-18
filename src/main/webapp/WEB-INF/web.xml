@@ -33,10 +33,33 @@
         <url-pattern>/categoriaActualizar</url-pattern>  
         <url-pattern>/verCarro</url-pattern>      
         <url-pattern>/clientes</url-pattern>
-        <url-pattern>/ordenes</url-pattern>  
+        <url-pattern>/nuevoCliente</url-pattern>
+        <url-pattern>/guardarCliente</url-pattern>
+        <url-pattern>/editarClienteForm</url-pattern>
+        <url-pattern>/editarCliente</url-pattern>
+        <url-pattern>/borrarCliente</url-pattern>
+        <url-pattern>/ordenes</url-pattern>
+        <url-pattern>/nuevasOrdenes</url-pattern> 
+        <url-pattern>/guardarOrden</url-pattern> 
+        <url-pattern>/editarOrden</url-pattern>
+        <url-pattern>/editarOrdenForm</url-pattern>  
+        <url-pattern>/eliminarOrden</url-pattern>
         <url-pattern>/ordenProductos</url-pattern>
-        <url-pattern>/productos</url-pattern>      
-        
+        <url-pattern>/nuevaOrdenProducto</url-pattern>
+        <url-pattern>/guardarOrdenProducto</url-pattern>
+        <url-pattern>/editarOrdenProducto</url-pattern>
+        <url-pattern>/editarOrdenProductoForm</url-pattern>
+        <url-pattern>/eliminarOrdenProducto</url-pattern>
+        <url-pattern>/nuevaOrdenProductos</url-pattern>
+        <url-pattern>/guardarOrdenProductos</url-pattern>
+        <url-pattern>/editarOrdenProductos</url-pattern>
+        <url-pattern>/eliminarOrdenProductos</url-pattern>
+        <url-pattern>/productos</url-pattern> 
+        <url-pattern>/nuevosProducto</url-pattern>
+        <url-pattern>/guardarProducto</url-pattern>
+        <url-pattern>/editarProducto</url-pattern>
+        <url-pattern>/editarProductoForm</url-pattern>
+        <url-pattern>/eliminarProducto</url-pattern>         
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -14,13 +14,13 @@ import java.util.ArrayList;
  */
 public interface TecOrdenProductoDao {
     
-    public ArrayList<TecOrdenProducto> buscar(int idOrd);
+    public TecOrdenProducto buscar(int idOrd, int idPro);
 
     public ArrayList<TecOrdenProducto> listar();
 
-    public boolean guardar(TecOrdenProducto cat);
+    public boolean guardar(TecOrdenProducto ordPro);
 
-    public boolean editar(TecOrdenProducto cat);
+    public boolean editar(TecOrdenProducto ordPro);
 
-    public boolean borrar(int id);
+    public boolean borrar(int ordId, int proId);
 }

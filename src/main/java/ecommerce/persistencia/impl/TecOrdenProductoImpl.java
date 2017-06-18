@@ -31,15 +31,16 @@ public class TecOrdenProductoImpl implements TecOrdenProductoDao {
     }
 
     @Override
-    public ArrayList<TecOrdenProducto> buscar(int idOrd) {
-        ArrayList<TecOrdenProducto> ordenProductos = new ArrayList<>();
+    public TecOrdenProducto buscar(int idOrd, int idPro) {
         ResultSet rs;
-        String sql = "SELECT * FROM tec_orden_producto WHERE ord_id = ?";
+        TecOrdenProducto ordPro = new TecOrdenProducto();
+        String sql = "SELECT * FROM tec_orden_producto WHERE ord_id = ? AND pro_id = ?";
         
         try {
 
             PreparedStatement pstm = this.conn.prepareStatement(sql);
             pstm.setInt(1, idOrd);
+            pstm.setInt(2, idPro);
             rs = pstm.executeQuery();
 
             if (!rs.next()) {
@@ -48,21 +49,19 @@ public class TecOrdenProductoImpl implements TecOrdenProductoDao {
             } else {
                 do {
                     //Orden
-                    TecOrden ord = new TecOrden();
+                    TecOrden ord;
                     TecOrdenImpl ordImpl = new TecOrdenImpl();
                     ord = ordImpl.buscar(0, rs.getInt("ord_id"));
                     
                     //Producto
-                    TecProducto pro = new TecProducto();
+                    TecProducto pro;
                     TecProductoImpl proImpl = new TecProductoImpl();
                     pro = proImpl.buscar(rs.getInt("pro_id"));
                     
-                    TecOrdenProducto ordPro = new TecOrdenProducto();
                     ordPro.setOrd(ord);
                     ordPro.setPro(pro);
                     ordPro.setTopCantidad(rs.getInt("top_cantidad"));
                     ordPro.setTopSubtotal(rs.getInt("top_subtotal"));
-                    ordenProductos.add(ordPro);
 
                 } while (rs.next());
             }
@@ -71,7 +70,7 @@ public class TecOrdenProductoImpl implements TecOrdenProductoDao {
             Logger.getLogger(TecCategoriaImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        return ordenProductos;
+        return ordPro;
     }
 
     @Override
@@ -121,18 +120,69 @@ public class TecOrdenProductoImpl implements TecOrdenProductoDao {
     }
 
     @Override
-    public boolean guardar(TecOrdenProducto cat) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean guardar(TecOrdenProducto proOrd) {
+        
+        boolean resultado = false;
+        String sql = "INSERT INTO tec_orden_producto(ord_id, pro_id, top_cantidad, top_subtotal) values(?, ?, ? ,?)";
+        try {
+            PreparedStatement pstm = this.conn.prepareStatement(sql);
+            pstm.setInt(1, proOrd.ord.getOrdId());
+            pstm.setInt(2, proOrd.pro.getProId());
+            pstm.setInt(3, proOrd.getTopCantidad());
+            pstm.setInt(4, proOrd.getTopSubtotal());
+            pstm.executeUpdate();
+            resultado = true;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(TecClienteImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return resultado;
     }
 
     @Override
-    public boolean editar(TecOrdenProducto cat) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean editar(TecOrdenProducto proOrd) {
+        
+        boolean result = false;
+        String sql = "UPDATE tec_orden_producto SET top_cantidad = ?, top_subtotal = ? WHERE ord_id = ? AND pro_id = ? ";
+        Logger.getLogger(TecOrdenProductoImpl.class.getName()).log(Level.SEVERE, "Orden Producto editar {0}", proOrd);
+
+        try {
+            PreparedStatement pstm = this.conn.prepareStatement(sql);
+            pstm.setInt(1, proOrd.getTopCantidad());
+            pstm.setInt(2, proOrd.getTopSubtotal());
+            pstm.setInt(3, proOrd.ord.getOrdId());
+            pstm.setInt(4, proOrd.pro.getProId());
+     
+            int filasAfectadas = pstm.executeUpdate();
+            result = (filasAfectadas != 0);
+            Logger.getLogger(TecOrdenProductoImpl.class.getName()).log(Level.SEVERE, "Edita {0}", result);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(TecOrdenProductoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return result;
     }
 
     @Override
-    public boolean borrar(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean borrar(int ordId, int proId) {
+        
+        boolean result = false;
+        String sql = "DELETE FROM tec_orden_producto WHERE ord_id = ? AND pro_id = ?";
+
+        try {
+            PreparedStatement pstm = this.conn.prepareStatement(sql);
+            pstm.setInt(1, ordId);
+            pstm.setInt(2, proId);
+            int filasAfectadas = pstm.executeUpdate();
+            result = (filasAfectadas != 0);
+            Logger.getLogger(TecClienteImpl.class.getName()).log(Level.SEVERE, "BORRA {0}", result);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(TecClienteImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return result;
     }
     
 }

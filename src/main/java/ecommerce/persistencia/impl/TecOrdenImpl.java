@@ -121,17 +121,68 @@ public class TecOrdenImpl implements TecOrdenDao{
 
     @Override
     public boolean guardar(TecOrden ord) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        boolean resultado = false;
+        String sql = "INSERT INTO tec_orden(cli_id, ord_fcreacion, ord_num_confirmacion, ord_precio_total) values(?, ?, ? ,?)";
+        try {
+            PreparedStatement pstm = this.conn.prepareStatement(sql);
+            pstm.setInt(1, ord.getCli().getCliId());
+            pstm.setString(2, ord.getOrdCreacion());
+            pstm.setInt(3, ord.getOrdNumConfirmacion());
+            pstm.setInt(4, ord.getOrdPrecioTotal());
+            pstm.executeUpdate();
+            resultado = true;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(TecClienteImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return resultado;
     }
 
     @Override
     public boolean editar(TecOrden ord) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        boolean result = false;
+        String sql = "UPDATE tec_orden SET ord_fcreacion = ?, ord_num_confirmacion = ?,"
+                + "ord_precio_total = ? WHERE ord_id = ?";
+        Logger.getLogger(TecOrdenImpl.class.getName()).log(Level.SEVERE, "Hospital editar {0}", ord);
+
+        try {
+            PreparedStatement pstm = this.conn.prepareStatement(sql);
+            pstm.setString(1, ord.getOrdCreacion());
+            pstm.setInt(2, ord.getOrdNumConfirmacion());
+            pstm.setInt(3, ord.getOrdPrecioTotal());
+            pstm.setInt(4, ord.getOrdId());
+            
+            int filasAfectadas = pstm.executeUpdate();
+            result = (filasAfectadas != 0);
+            Logger.getLogger(TecOrdenImpl.class.getName()).log(Level.SEVERE, "Edita {0}", result);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(TecOrdenImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return result;
+        
     }
 
     @Override
     public boolean borrar(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        boolean result = false;
+        String sql = "DELETE FROM tec_orden WHERE ord_id = ?";
+
+        try {
+            PreparedStatement pstm = this.conn.prepareStatement(sql);
+            pstm.setInt(1, id);
+            int filasAfectadas = pstm.executeUpdate();
+            result = (filasAfectadas != 0);
+            Logger.getLogger(TecClienteImpl.class.getName()).log(Level.SEVERE, "BORRA {0}", result);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(TecClienteImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return result;
     }
     
 }
